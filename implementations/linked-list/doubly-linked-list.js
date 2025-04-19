@@ -1,27 +1,12 @@
-//*10-->5-->16
-
-//Simply Linked List
-// let myLinkedList = {
-//   head: {
-//     value: 10,
-//     next: {
-//       value: 5,
-//       next: {
-//         value: 16,
-//         next: null,
-//       },
-//     },
-//   },
-// };
-
 class Node {
   constructor(value) {
     this.value = value;
     this.next = null;
+    this.prev = null;
   }
 }
 
-class LinkedList {
+class DoublyLinkedList {
   constructor(value) {
     this.head = new Node(value);
     this.tail = this.head;
@@ -31,6 +16,7 @@ class LinkedList {
   //*Listenin sonuna ekleme = O(1)
   append(value) {
     const newNode = new Node(value);
+    newNode.prev = this.tail;
     this.tail.next = newNode;
     this.tail = newNode;
     this.length++;
@@ -41,6 +27,7 @@ class LinkedList {
   prepend(value) {
     const newNode = new Node(value);
     newNode.next = this.head;
+    this.head.prev = newNode;
     this.head = newNode;
     this.length++;
 
@@ -65,7 +52,8 @@ class LinkedList {
 
     newNode.next = leader.next;
     leader.next = newNode;
-
+    newNode.prev = leader;
+    leader.next.prev = newNode;
     this.length++;
 
     return this;
@@ -78,25 +66,38 @@ class LinkedList {
     }
 
     let removedValue;
+
     if (index === 0) {
       removedValue = this.head.value;
       this.head = this.head.next;
+
+      if (this.head) {
+        this.head.prev = null;
+      }
+
       this.length--;
 
       if (this.length === 0) {
+        this.head = null;
         this.tail = null;
       }
 
       return removedValue;
     }
 
-    const leader = this.traverseToIndex(index);
-    const unwantedNode = leader.next;
+    const unwantedNode = this.traverseToIndex(index);
     removedValue = unwantedNode.value;
-    leader.next = unwantedNode.next;
+
+    if (unwantedNode.prev) {
+      unwantedNode.prev.next = unwantedNode.next;
+    }
+
+    if (unwantedNode.next) {
+      unwantedNode.next.prev = unwantedNode.prev;
+    }
 
     if (index === this.length - 1) {
-      this.tail = leader;
+      this.tail = unwantedNode.prev;
     }
 
     this.length--;
@@ -106,7 +107,7 @@ class LinkedList {
   traverseToIndex(index) {
     let iter = 0;
     let currentNode = this.head;
-    while (iter < index - 1) {
+    while (iter < index) {
       currentNode = currentNode.next;
       iter++;
     }
@@ -128,12 +129,12 @@ class LinkedList {
   }
 }
 
-const myLinkedList = new LinkedList(10);
-myLinkedList.append(16);
-myLinkedList.prepend(3);
-myLinkedList.append(20);
+const myLinkedList = new DoublyLinkedList(10);
+
+myLinkedList.append(5);
+myLinkedList.prepend(4);
+myLinkedList.insert(1, 13);
 myLinkedList.insert(0, 99);
-myLinkedList.insert(5, 66);
-myLinkedList.remove(0);
 myLinkedList.remove(4);
+myLinkedList.remove(0);
 myLinkedList.print();
