@@ -10,6 +10,7 @@ This repository contains implementations of various data structures in JavaScrip
   - `arrays/`: Array data structure implementation.
   - `hash-tables/`: Hash table implementation.
   - `linked-list/`: Linked list implementations.
+  - `stack-and-queue`: Stack and queue implementations using arrays and linked lists.
 - `problem-solving/`: Solving common problems using the implemented data structures.
 
 ## Usage
