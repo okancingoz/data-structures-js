@@ -102,7 +102,7 @@ class LinkedList {
     this.length--;
     return removedValue;
   }
-
+  
   traverseToIndex(index) {
     let iter = 0;
     let currentNode = this.head;
@@ -112,6 +112,29 @@ class LinkedList {
     }
     return currentNode;
   }
+
+  reverse() {
+    if (!this.head || !this.head.next) {
+      return this;
+    }
+
+    let prev = null;
+    let current = this.head;
+
+    while (current) {
+      const next = current.next; // Bir sonraki node'u kaybet
+      current.next = prev; // Yönü ters çevir
+      prev = current; // İleri kay
+      current = next;
+    }
+
+    this.tail = this.head;
+    this.head = prev;
+
+    return this;
+  }
+
+ 
 
   print() {
     const values = [];
@@ -129,11 +152,12 @@ class LinkedList {
 }
 
 const myLinkedList = new LinkedList(10);
-myLinkedList.append(16);
-myLinkedList.prepend(3);
 myLinkedList.append(20);
-myLinkedList.insert(0, 99);
-myLinkedList.insert(5, 66);
-myLinkedList.remove(0);
-myLinkedList.remove(4);
+myLinkedList.prepend(0);
+myLinkedList.append(30);
+myLinkedList.insert(0, 1);
+
+// myLinkedList.remove(0);
+// myLinkedList.remove(4);
+myLinkedList.reverse();
 myLinkedList.print();
